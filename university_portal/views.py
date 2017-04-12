@@ -54,6 +54,7 @@ def grades(request):
     else:
         assignment = get_grades(request.GET['aid'], request.GET['Deadline'])
         return render(request, "faculties/assignment.html", {"session":request.session, "grade":assignment})
+
 # Query function for Assignment
 
 def get_faculty(username):
@@ -65,7 +66,6 @@ def get_faculty(username):
     conn.close()
     return faculty
 
-
 def get_courses(username):
     conn = MySQLdb.connect(user='root', password='root123', database='ssdi_project', host='localhost')
     cur = conn.cursor()
@@ -73,8 +73,6 @@ def get_courses(username):
     cur.execute(statement)
     course = cur.fetchall()
     return course
-    conn.close()
-
 
 def get_assignments(CourseID):
     conn = MySQLdb.connect(user='root', password='root123', database='ssdi_project', host='localhost')
@@ -83,7 +81,6 @@ def get_assignments(CourseID):
     cur.execute(statement)
     all_assignment = cur.fetchall()
     return all_assignment
-    conn.close()
 
 def get_grades(aid, Deadline):
     conn = MySQLdb.connect(user='root', password='root123', database='ssdi_project', host='localhost')
@@ -98,4 +95,3 @@ def get_grades(aid, Deadline):
     cur1.execute(statement2)
     rs = cur1.fetchall()
     return rs
-    conn.close()
