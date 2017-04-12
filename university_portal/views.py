@@ -52,7 +52,7 @@ def grades(request):
     if 'username' not in request.session:
         return render(request, "university_portal/login.html", {})
     else:
-        assignment = get_grades(request.get['aid'], request.get['Deadline'])
+        assignment = get_grades(request.GET['aid'], request.GET['Deadline'])
         return render(request, "faculties/assignment.html", {"session":request.session, "grade":assignment})
 # Query function for Assignment
 
@@ -89,10 +89,13 @@ def get_grades(aid, Deadline):
     conn = MySQLdb.connect(user='root', password='root123', database='ssdi_project', host='localhost')
     cur = conn.cursor()
     cur1= conn.cursor()
+    print (Deadline)
     statement = "update fac_submit set deadline_date= \'" + Deadline +"\' where aid= \'" + aid + "\'"
-    statement2 = "select sid from fac_submit where aid= \'" + aid + "\'"
+    print(statement)
+    statement2 = "select sid from stu_submit where aid= \'" + aid + "\'"
     cur.execute(statement)
-    cur1.excute(statement2)
+    conn.commit()
+    cur1.execute(statement2)
     rs = cur1.fetchall()
     return rs
     conn.close()
