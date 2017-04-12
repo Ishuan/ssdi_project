@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^login', views.login, name='login'),
     url(r'^logout', views.logout, name='logout'),
     url(r'^assignments', views.assignments, name='assignments'),
-    url(r'grades',views.grades,name='grades'),
+    url(r'grades', views.grades, name='grades')
+
 ]
 

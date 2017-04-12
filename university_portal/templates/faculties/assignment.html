@@ -32,86 +32,91 @@
                     <li><a href="logout"><span class="glyphicon glyphicon-log-out"></span></a></li>
                 </ul>
             </div>
-
         </div>
     </nav>
 
     <div class="col-sm-3"></div>
-
     <div class="col-sm-6">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#">All</a></li>
-            <li><a href="grades">Grading</a></li>
+            <li class="active"><a data-toggle="tab" href="#All">All</a></li>
+            <li><a data-toggle="tab" href="#Grades">Grading</a></li>
         </ul>
 
         <br>
 
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#panel1">Assignments</a>
-                </h4>
-            </div>
-        </div>
-
-        <div id="panel1" class="panel-collapse collapse in">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Assignments</th>
-                        <th>CourseID</th>
-                        <th>Course Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for all in assignments %}
-                        <tr>
-                            <td>{{ all.0 }}</td>
-                            <td>{{ all.1 }}</td>
-                            <td>{{ all.2 }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#panel2">Post Assignments</a>
-                    </h4>
+        <div class="tab-content">
+            <div id="All" class="tab-pane fade-in-active">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#panel1">Assignments</a>
+                        </h4>
+                    </div>
                 </div>
-            </div>
 
-            <div id="panel2" class="panel-collapse collapse">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Assignments</th>
-                            <th>CourseID</th>
-                            <th>Course Name</th>
-                            <th>Deadline</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for all in assignments %}
-                            <form action="Assignment_Details" method="get">
+                <div id="panel1" class="panel-collapse collapse in">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Assignments</th>
+                                <th>CourseID</th>
+                                <th>Course Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for all in assignments %}
                                 <tr>
-                                    <input type="hidden" name="aid" value="{{ all.0 }}" />
                                     <td>{{ all.0 }}</td>
                                     <td>{{ all.1 }}</td>
                                     <td>{{ all.2 }}</td>
-                                    <td><input type="date" name="Deadline" required="true"/></td>
-                                    <td><button type="submit" class="btn btn-xs btn-info">
-                                        <span class="glyphicon glyphicon-send" data-toggle="tooltip"
-                                              title="Post"></span>&nbsp;</button></td>
                                 </tr>
-                            </form>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#panel2">Post Assignments</a>
+                        </h4>
+                    </div>
+                </div>
+
+                <div id="panel2" class="panel-collapse collapse">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Assignments</th>
+                                <th>CourseID</th>
+                                <th>Course Name</th>
+                                <th>Deadline</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for all in assignments %}
+                                <form action="grades" method="get">
+                                    <tr>
+                                        <input type="hidden" name="aid" value="{{ all.0 }}" />
+                                        <td>{{ all.0 }}</td>
+                                        <td>{{ all.1 }}</td>
+                                        <td>{{ all.2 }}</td>
+                                        <td><input type="date" name="Deadline" required="true"/></td>
+                                        <td><button type="submit" class="btn btn-xs btn-info">
+                                            <span class="glyphicon glyphicon-send" data-toggle="tooltip"
+                                              title="Post"></span>&nbsp;</button></td>
+                                    </tr>
+                                </form>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="Grades" class="tab-pane fade">
+                <h3>{{ assignments.0 }}</h3>
             </div>
         </div>
     </div>

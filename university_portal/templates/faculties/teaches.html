@@ -48,7 +48,7 @@
                     {% for key, value, sem in session.courses %}
                         <tr>
                             <td>
-                                <form action="/assignments" method="GET">
+                                <form action="assignments" method="GET">
                                     <input type="submit" name="CourseID" class="btn btn-link" value="{{ key }}" />
                                 </form>
                             </td>
