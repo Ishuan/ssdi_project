@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import MySQLdb
+from datetime import datetime
 
 
 def start(request):
@@ -46,14 +47,23 @@ def assignments(request):
     else:
         assign = get_assignments(request.GET['CourseID'])
         faculty = get_faculty(request.session['username'])
-        return render(request, "faculties/assignment.html", {"session": request.session, "assignments": assign, "faculties": faculty})
+        return render(request, "faculties/assignment.html",
+                      {"session": request.session, "assignments": assign, "faculties": faculty,
+                       "mindate": datetime.today()})
+
 
 def grades(request):
     if 'username' not in request.session:
         return render(request, "university_portal/login.html", {})
     else:
-        assignment = get_grades(request.GET['aid'], request.GET['Deadline'])
-        return render(request, "faculties/assignment.html", {"session":request.session, "grade":assignment})
+        assign = get_assignments(request.GET['CourseID'])
+        faculty = get_faculty(request.session['username'])
+        assignment, students = get_grades(request.GET['aid'], request.GET['Deadline'])
+        print(datetime.today())
+        return render(request, "faculties/assignment.html",
+                      {"session": request.session, "students": students, "faculties": faculty, "assignments": assign,
+                       "deadline": assignment, "mindate": datetime.now().strftime("%Y-%m-%d")})
+
 
 # Query function for Assignment
 
@@ -66,6 +76,7 @@ def get_faculty(username):
     conn.close()
     return faculty
 
+
 def get_courses(username):
     conn = MySQLdb.connect(user='root', password='root123', database='ssdi_project', host='localhost')
     cur = conn.cursor()
@@ -73,6 +84,7 @@ def get_courses(username):
     cur.execute(statement)
     course = cur.fetchall()
     return course
+
 
 def get_assignments(CourseID):
     conn = MySQLdb.connect(user='root', password='root123', database='ssdi_project', host='localhost')
@@ -82,16 +94,18 @@ def get_assignments(CourseID):
     all_assignment = cur.fetchall()
     return all_assignment
 
+
 def get_grades(aid, Deadline):
     conn = MySQLdb.connect(user='root', password='root123', database='ssdi_project', host='localhost')
     cur = conn.cursor()
-    cur1= conn.cursor()
-    print (Deadline)
-    statement = "update fac_submit set deadline_date= \'" + Deadline +"\' where aid= \'" + aid + "\'"
-    print(statement)
-    statement2 = "select sid from stu_submit where aid= \'" + aid + "\'"
+    cur1 = conn.cursor()
+    statement = "update fac_submit set deadline_date= \'" + Deadline + "\' where aid= \'" + aid + "\'"
+    statement2 = "select * from students s, assignments a where a.sid=s.sid and aid=\'" +aid+"\'";
     cur.execute(statement)
     conn.commit()
+    statement = "select deadline_date from fac_submit where aid=\'" + aid + "\'"
+    cur.execute(statement)
     cur1.execute(statement2)
-    rs = cur1.fetchall()
-    return rs
+    rs = cur.fetchall()
+    rs1 = cur1.fetchall()
+    return rs, rs1
